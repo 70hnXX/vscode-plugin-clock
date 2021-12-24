@@ -1,0 +1,104 @@
+{
+	"name": "work-clock",
+	"displayName": "work clock",
+	"description": "",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.60.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*",
+		"onCommand:work-clock.helloWorld",
+		"onCommand:work-clock.showSelectionCount"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "work-clock.helloWorld",
+				"title": "Hello World"
+			},
+			{
+				"command": "work-clock.showSelectionCount",
+				"title": "showSelectionCount"
+			},
+			{
+				"command": "work-clock.refreshEntry",
+				"title": "refreshEntry"
+			},
+			{
+				"command": "work-clock.addEntry",
+				"title": "addEntry"
+			},
+			{
+				"command": "work-clock.deleteFolder",
+				"title": "删除"
+			}
+		],
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "package-explorer",
+					"title": "任务列表",
+					"icon": "media/clock.svg"
+				}
+			]
+		},
+		"views": {
+			"package-explorer": [
+				{
+					"id": "package-schedule",
+					"name": "日程"
+				},
+				{
+					"id": "package-goal",
+					"name": "目标"
+				}
+			]
+		},
+		"menus": {
+			"view/title": [
+				{
+					"command": "work-clock.refreshEntry",
+					"when": "view == package-explorer",
+					"group": "navigation"
+				},
+				{
+					"command": "work-clock.addEntry",
+					"when": "view == package-explorer"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "work-clock.deleteFolder",
+					"group": "inline",
+					"when": "viewItem == folder"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "yarn run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "yarn run compile && yarn run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.63.0",
+		"@types/glob": "^7.1.4",
+		"@types/mocha": "^9.0.0",
+		"@types/node": "14.x",
+		"@typescript-eslint/eslint-plugin": "^5.1.0",
+		"@typescript-eslint/parser": "^5.1.0",
+		"eslint": "^8.1.0",
+		"glob": "^7.1.7",
+		"mocha": "^9.1.3",
+		"typescript": "^4.4.4",
+		"@vscode/test-electron": "^1.6.2"
+	}
+}
