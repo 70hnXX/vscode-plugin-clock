@@ -63,12 +63,11 @@
 			"view/title": [
 				{
 					"command": "work-clock.refreshEntry",
-					"when": "view == package-explorer",
 					"group": "navigation"
 				},
 				{
 					"command": "work-clock.addEntry",
-					"when": "view == package-explorer"
+					"group": "navigation"
 				}
 			],
 			"view/item/context": [
