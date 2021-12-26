@@ -2,10 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.scheduleDataProvider = void 0;
 const vscode = require("vscode");
-function scheduleDataProvider() {
+const scheduleApi_1 = require("../service/scheduleApi");
+const date_1 = require("../utils/date");
+function scheduleDataProvider(workspaceState) {
     return {
-        getChildren: (element) => {
-            return getChildren();
+        getChildren: async (element) => {
+            const children = await getChildren(workspaceState);
+            return children;
         },
         getTreeItem: (element) => {
             const treeItem = getTreeItem(element);
@@ -27,7 +30,18 @@ const tree = [
 ];
 const nodes = {};
 // 获取列表
-function getChildren() {
+async function getChildren(workspaceState) {
+    try {
+        const res = await (0, scheduleApi_1.getScheduleList)({
+            startAt: (0, date_1.getFirstDayOfMonth)(new Date()),
+            endAt: (0, date_1.getLastDayOfMonth)(new Date()),
+        }, workspaceState);
+        // console.log('res',res);
+        return res;
+    }
+    catch (e) {
+        console.log(e);
+    }
     return tree;
 }
 // 获取子项目

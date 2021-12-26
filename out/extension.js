@@ -4,8 +4,15 @@ exports.activate = void 0;
 const vscode = require("vscode");
 const schedule_1 = require("./schedule");
 const goal_1 = require("./goal");
+const authApi_1 = require("./service/authApi");
 let myStatusBarItem;
-function activate({ subscriptions }) {
+async function activate({ subscriptions, workspaceState }) {
+    // 初始化鉴权信息
+    const userInfo = await (0, authApi_1.login)();
+    // globalState.update('token',userInfo.token)
+    // globalState.update('userName',userInfo.token)
+    workspaceState.update('token', userInfo.token);
+    workspaceState.update('userName', userInfo.userInfo.nickName);
     subscriptions.push(vscode.commands.registerCommand("work-clock.refreshEntry", (e) => {
         vscode.window.showInformationMessage("refreshEntry!");
     }));
@@ -17,7 +24,7 @@ function activate({ subscriptions }) {
     }));
     // 初始化日程列表
     vscode.window.createTreeView("package-schedule", {
-        treeDataProvider: (0, schedule_1.scheduleDataProvider)(),
+        treeDataProvider: (0, schedule_1.scheduleDataProvider)(workspaceState),
         showCollapseAll: true,
         canSelectMany: false,
     });

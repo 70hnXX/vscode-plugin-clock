@@ -2,10 +2,17 @@ import * as vscode from "vscode";
 
 import { scheduleDataProvider } from "./schedule";
 import { goalDataProvider } from "./goal";
+import { login } from "./service/authApi";
 
 let myStatusBarItem: vscode.StatusBarItem;
 
-export function activate({ subscriptions }: vscode.ExtensionContext) {
+export async function activate({ subscriptions,workspaceState }: vscode.ExtensionContext) {
+  // 初始化鉴权信息
+  const userInfo = await login();
+  // globalState.update('token',userInfo.token)
+  // globalState.update('userName',userInfo.token)
+  workspaceState.update('token',userInfo.token);
+  workspaceState.update('userName',userInfo.userInfo.nickName);
   subscriptions.push(
     vscode.commands.registerCommand("work-clock.refreshEntry", (e) => {
       vscode.window.showInformationMessage("refreshEntry!");
@@ -23,7 +30,7 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
   );
   // 初始化日程列表
   vscode.window.createTreeView("package-schedule", {
-    treeDataProvider: scheduleDataProvider(),
+    treeDataProvider: scheduleDataProvider(workspaceState),
     showCollapseAll: true,
     canSelectMany: false,
   });
