@@ -16,6 +16,18 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"customEditors": [
+			{
+				"viewType": "catEdit.catScratch",
+				"displayName": "Cat Scratch",
+				"selector": [
+					{
+						"filenamePattern": "*.cscratch"
+					}
+				],
+				"priority": "default"
+			}
+		],
 		"configuration": [
 			{
 				"title": "vsCodeClock",

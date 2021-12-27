@@ -45,7 +45,7 @@ function getTreeItem(element) {
             label: element.title,
             highlights: 0,
         },
-        contextValue: "folder",
+        contextValue: "file",
         tooltip,
         collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
     };

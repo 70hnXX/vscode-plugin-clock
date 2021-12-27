@@ -38,9 +38,8 @@ async function activate({ subscriptions, workspaceState, }) {
         vscode.window.showInformationMessage("deleteFolder!");
     }));
     subscriptions.push(vscode.commands.registerCommand("work-clock.edit", (e) => {
-        console.log(e);
+        // console.log(e);
         vscode.window.showInformationMessage("edit!");
-        vscode.window.showTextDocument(e.title);
     }));
     // 初始化状态栏
     const myCommandId = "work-clock.showSelectionCount";

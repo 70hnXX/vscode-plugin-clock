@@ -49,9 +49,8 @@ export async function activate({
   );
   subscriptions.push(
     vscode.commands.registerCommand("work-clock.edit", (e) => {
-      console.log(e);
+      // console.log(e);
       vscode.window.showInformationMessage("edit!");
-      vscode.window.showTextDocument(e.title);
     })
   );
   // 初始化状态栏
