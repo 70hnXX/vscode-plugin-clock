@@ -3,9 +3,12 @@ import * as vscode from "vscode";
 const axios = require("axios");
 const qs = require("qs");
 
-export async function axiosGet(config: { url: string; param: {} },workspaceState: vscode.Memento) {
+export async function axiosGet(
+  config: { url: string; param: {} },
+  workspaceState: vscode.Memento
+) {
   try {
-    const token = workspaceState.get('token')
+    const token = workspaceState.get("token");
     // console.log('reqBody:',{
     //   method: "GET",
     //   headers: {
@@ -20,15 +23,17 @@ export async function axiosGet(config: { url: string; param: {} },workspaceState
         "Content-Type": "application/x-www-form-urlencoded",
         Authorization: `Bearer ${token}`,
       },
-      url: config.url+'?' + qs.stringify(config.param),
+      url: config.url + "?" + qs.stringify(config.param),
     });
     const { data } = responseBody;
     if (data.code === 200) {
       return data.data;
     }
+    console.log(data);
     vscode.window.showErrorMessage(data.msg);
     throw new Error(data.msg);
   } catch (error) {
+    console.log(error);
     vscode.window.showErrorMessage("网络错误");
     throw new Error("网络错误");
   }
@@ -60,6 +65,7 @@ export async function axiosPost(config: { url: string; data: {} }) {
     if (data.code === 200) {
       return data.data;
     }
+    console.log(data);
     vscode.window.showErrorMessage(data.msg);
     throw new Error(data.msg);
   } catch (error) {

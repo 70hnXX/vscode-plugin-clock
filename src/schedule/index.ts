@@ -2,7 +2,9 @@ import * as vscode from "vscode";
 import { getScheduleList } from "../service/scheduleApi";
 import { getFirstDayOfMonth, getLastDayOfMonth } from "../utils/date";
 
-export function scheduleDataProvider(workspaceState: vscode.Memento): vscode.TreeDataProvider<{
+export function scheduleDataProvider(
+  workspaceState: vscode.Memento
+): vscode.TreeDataProvider<{
   key: string;
 }> {
   return {
@@ -16,34 +18,29 @@ export function scheduleDataProvider(workspaceState: vscode.Memento): vscode.Tre
       const treeItem = getTreeItem(element);
       return treeItem;
     },
+
     // getParent: ({ key }: { key: string }): { key: string } => {
     //   const parentKey = key.substring(0, key.length - 1);
     //   return parentKey ? new Key(parentKey) : new Key("");
     // },
   };
 }
-const tree = [
-  {
-    id: "666",
-    title: "title1",
-    children: [],
-  },
-];
-const nodes = {};
 
 // 获取列表
 async function getChildren(workspaceState: vscode.Memento): Promise<any[]> {
   try {
-    const res = await getScheduleList({
-      startAt: getFirstDayOfMonth(new Date()),
-      endAt: getLastDayOfMonth(new Date()),
-    },workspaceState);
-    // console.log('res',res);
-    return res
+    const res = await getScheduleList(
+      {
+        startAt: getFirstDayOfMonth(new Date()),
+        endAt: getLastDayOfMonth(new Date()),
+      },
+      workspaceState
+    );
+    return res;
   } catch (e) {
     console.log(e);
   }
-  return tree;
+  return [];
 }
 
 // 获取子项目

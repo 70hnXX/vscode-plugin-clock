@@ -16,7 +16,7 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"configuration":[
+		"configuration": [
 			{
 				"title": "vsCodeClock",
 				"properties": {
@@ -44,15 +44,35 @@
 			},
 			{
 				"command": "work-clock.refreshEntry",
-				"title": "refreshEntry"
+				"title": "刷新",
+				"icon": {
+					"dark": "media/light/refresh.svg",
+					"light": "media/dark/refresh.svg"
+				}
 			},
 			{
 				"command": "work-clock.addEntry",
-				"title": "addEntry"
+				"title": "添加",
+				"icon": {
+					"dark": "media/light/add.svg",
+					"light": "media/dark/add.svg"
+				}
 			},
 			{
 				"command": "work-clock.deleteFolder",
-				"title": "删除"
+				"title": "删除",
+				"icon": {
+					"dark": "media/light/delete.svg",
+					"light": "media/dark/delete.svg"
+				}
+			},
+			{
+				"command": "work-clock.edit",
+				"title": "编辑",
+				"icon": {
+					"dark": "media/light/edit.svg",
+					"light": "media/dark/edit.svg"
+				}
 			}
 		],
 		"viewsContainers": {
@@ -68,7 +88,8 @@
 			"package-explorer": [
 				{
 					"id": "package-schedule",
-					"name": "日程"
+					"name": "日程",
+					"icon": "media/delete-white.svg"
 				},
 				{
 					"id": "package-goal",
@@ -79,15 +100,24 @@
 		"menus": {
 			"view/title": [
 				{
+					"id": "package-refreash",
+					"title": "refreshEntry",
 					"command": "work-clock.refreshEntry",
 					"group": "navigation"
 				},
 				{
+					"id": "package-add",
+					"title": "addEntry",
 					"command": "work-clock.addEntry",
 					"group": "navigation"
 				}
 			],
 			"view/item/context": [
+				{
+					"command": "work-clock.edit",
+					"group": "inline",
+					"when": "viewItem == folder"
+				},
 				{
 					"command": "work-clock.deleteFolder",
 					"group": "inline",

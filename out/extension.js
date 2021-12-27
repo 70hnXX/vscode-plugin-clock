@@ -6,22 +6,14 @@ const schedule_1 = require("./schedule");
 const goal_1 = require("./goal");
 const authApi_1 = require("./service/authApi");
 let myStatusBarItem;
-async function activate({ subscriptions, workspaceState }) {
+async function activate({ subscriptions, workspaceState, }) {
     // 初始化鉴权信息
     const userInfo = await (0, authApi_1.login)();
     // globalState.update('token',userInfo.token)
     // globalState.update('userName',userInfo.token)
-    workspaceState.update('token', userInfo.token);
-    workspaceState.update('userName', userInfo.userInfo.nickName);
-    subscriptions.push(vscode.commands.registerCommand("work-clock.refreshEntry", (e) => {
-        vscode.window.showInformationMessage("refreshEntry!");
-    }));
-    subscriptions.push(vscode.commands.registerCommand("work-clock.addEntry", (e) => {
-        vscode.window.showInformationMessage("addEntry!");
-    }));
-    subscriptions.push(vscode.commands.registerCommand("work-clock.deleteFolder", (e) => {
-        vscode.window.showInformationMessage("deleteFolder!");
-    }));
+    workspaceState.update("token", userInfo.token);
+    workspaceState.update("userName", userInfo.userInfo.nickName);
+    console.log("userInfo", userInfo);
     // 初始化日程列表
     vscode.window.createTreeView("package-schedule", {
         treeDataProvider: (0, schedule_1.scheduleDataProvider)(workspaceState),
@@ -34,6 +26,22 @@ async function activate({ subscriptions, workspaceState }) {
         showCollapseAll: true,
         canSelectMany: false,
     });
+    // 注册命令
+    subscriptions.push(vscode.commands.registerCommand("work-clock.refreshEntry", (e) => {
+        vscode.window.showInformationMessage("refreshEntry!");
+        // scheduleDataProvider.refresh()
+    }));
+    subscriptions.push(vscode.commands.registerCommand("work-clock.addEntry", (e) => {
+        vscode.window.showInformationMessage("addEntry!");
+    }));
+    subscriptions.push(vscode.commands.registerCommand("work-clock.deleteFolder", (e) => {
+        vscode.window.showInformationMessage("deleteFolder!");
+    }));
+    subscriptions.push(vscode.commands.registerCommand("work-clock.edit", (e) => {
+        console.log(e);
+        vscode.window.showInformationMessage("edit!");
+        vscode.window.showTextDocument(e.title);
+    }));
     // 初始化状态栏
     const myCommandId = "work-clock.showSelectionCount";
     subscriptions.push(vscode.commands.registerCommand(myCommandId, () => {

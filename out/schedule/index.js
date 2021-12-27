@@ -21,14 +21,6 @@ function scheduleDataProvider(workspaceState) {
     };
 }
 exports.scheduleDataProvider = scheduleDataProvider;
-const tree = [
-    {
-        id: "666",
-        title: "title1",
-        children: [],
-    },
-];
-const nodes = {};
 // 获取列表
 async function getChildren(workspaceState) {
     try {
@@ -36,13 +28,12 @@ async function getChildren(workspaceState) {
             startAt: (0, date_1.getFirstDayOfMonth)(new Date()),
             endAt: (0, date_1.getLastDayOfMonth)(new Date()),
         }, workspaceState);
-        // console.log('res',res);
         return res;
     }
     catch (e) {
         console.log(e);
     }
-    return tree;
+    return [];
 }
 // 获取子项目
 function getTreeItem(element) {
