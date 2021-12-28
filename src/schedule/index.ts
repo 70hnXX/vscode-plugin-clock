@@ -18,12 +18,13 @@ export function scheduleDataProvider(
       const treeItem = getTreeItem(element);
       return treeItem;
     },
-
-    // getParent: ({ key }: { key: string }): { key: string } => {
-    //   const parentKey = key.substring(0, key.length - 1);
-    //   return parentKey ? new Key(parentKey) : new Key("");
-    // },
   };
+}
+export function updateView() {
+  const eventEmitter = new vscode.EventEmitter<
+    vscode.TreeItem | undefined | void
+  >();
+  eventEmitter.fire();
 }
 
 // 获取列表
@@ -34,7 +35,7 @@ async function getChildren(workspaceState: vscode.Memento): Promise<any[]> {
         startAt: getFirstDayOfMonth(new Date()),
         endAt: getLastDayOfMonth(new Date()),
       },
-      workspaceState
+      "123"
     );
     return res;
   } catch (e) {

@@ -29,12 +29,15 @@ export interface resScheduleDto {
 /** 获取日程列表 GET /api/schedule' */
 export async function getScheduleList(
   params: ListQueryInterface,
-  workspaceState: vscode.Memento
+  token: string
 ) {
-  return axiosGet({
-    url: `${apiUrl}/api/schedule`,
-    param: params,
-  },workspaceState);
+  return axiosGet(
+    {
+      url: `${apiUrl}/api/schedule`,
+      param: params,
+    },
+    token
+  );
 }
 
 // /** 创建日程 POST /api/schedule */

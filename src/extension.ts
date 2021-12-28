@@ -1,8 +1,11 @@
 import * as vscode from "vscode";
-
 import { scheduleDataProvider } from "./schedule";
 import { goalDataProvider } from "./goal";
 import { login } from "./service/authApi";
+
+import { DataProvider, TreeViewItem } from "./treeview-data-provider";
+import { getScheduleList } from "./service/scheduleApi";
+import { getFirstDayOfMonth, getLastDayOfMonth } from "./utils/date";
 
 let myStatusBarItem: vscode.StatusBarItem;
 
@@ -12,58 +15,72 @@ export async function activate({
 }: vscode.ExtensionContext) {
   // 初始化鉴权信息
   const userInfo = await login();
-  // globalState.update('token',userInfo.token)
-  // globalState.update('userName',userInfo.token)
   workspaceState.update("token", userInfo.token);
   workspaceState.update("userName", userInfo.userInfo.nickName);
-  console.log("userInfo", userInfo);
-
-  // 初始化日程列表
-  vscode.window.createTreeView("package-schedule", {
-    treeDataProvider: scheduleDataProvider(workspaceState),
-    showCollapseAll: true,
-    canSelectMany: false,
-  });
-  // 初始化目标列表
-  vscode.window.createTreeView("package-goal", {
-    treeDataProvider: goalDataProvider(),
-    showCollapseAll: true,
-    canSelectMany: false,
-  });
-  // 注册命令
-  subscriptions.push(
-    vscode.commands.registerCommand("work-clock.refreshEntry", (e) => {
-      vscode.window.showInformationMessage("refreshEntry!");
-      // scheduleDataProvider.refresh()
+  const dataProvider = new DataProvider();
+  // 初始化列表
+  vscode.window.registerTreeDataProvider("treeview", dataProvider);
+  const list = await getScheduleList(
+    {
+      startAt: getFirstDayOfMonth(new Date()),
+      endAt: getLastDayOfMonth(new Date()),
+    },
+    userInfo.token
+  );
+  dataProvider.init(
+    list.map((item: any) => {
+      return new TreeViewItem(item.title);
     })
   );
-  subscriptions.push(
-    vscode.commands.registerCommand("work-clock.addEntry", (e) => {
-      vscode.window.showInformationMessage("addEntry!");
-    })
+  let addItem = vscode.commands.registerCommand(
+    "vsClock-schdule.add",
+    async () => {
+      const itemId =
+        (await vscode.window.showInputBox({
+          placeHolder: "添加一个任务",
+        })) || "";
+      if (itemId !== "") {
+        dataProvider.addItem(new TreeViewItem(itemId));
+      }
+      vscode.window.showInformationMessage("任务已添加!");
+    }
   );
-  subscriptions.push(
-    vscode.commands.registerCommand("work-clock.deleteFolder", (e) => {
-      vscode.window.showInformationMessage("deleteFolder!");
-    })
+  let editItem = vscode.commands.registerCommand(
+    "vsClock-schdule.edit",
+    async (item: TreeViewItem) => {
+      const itemName =
+        (await vscode.window.showInputBox({
+          placeHolder: "输入新的任务名",
+        })) || "";
+      if (itemName !== "") {
+        dataProvider.editItem(item, itemName);
+      }
+      vscode.window.showInformationMessage("任务已更新!");
+    }
   );
-  subscriptions.push(
-    vscode.commands.registerCommand("work-clock.edit", (e) => {
-      // console.log(e);
-      vscode.window.showInformationMessage("edit!");
-    })
+  let deleteItem = vscode.commands.registerCommand(
+    "vsClock-schdule.delete",
+    async (item: TreeViewItem) => {
+      const confirm = await vscode.window.showQuickPick(["delete", "canel"], {
+        placeHolder: "确定删除任务?",
+      });
+      if (confirm === "delete") {
+        dataProvider.deleteItem(item);
+      }
+      vscode.window.showInformationMessage("任务已删除!");
+    }
   );
+  subscriptions.push(addItem, editItem, deleteItem);
   // 初始化状态栏
+  myStatusBarItem = vscode.window.createStatusBarItem(
+    vscode.StatusBarAlignment.Left,
+    100
+  );
   const myCommandId = "work-clock.showSelectionCount";
   subscriptions.push(
     vscode.commands.registerCommand(myCommandId, () => {
       vscode.window.showInformationMessage(`Yeah, Keep going!`);
     })
-  );
-  // create a new status bar item that we can now manage
-  myStatusBarItem = vscode.window.createStatusBarItem(
-    vscode.StatusBarAlignment.Left,
-    100
   );
   myStatusBarItem.command = myCommandId;
   subscriptions.push(myStatusBarItem);
@@ -71,3 +88,4 @@ export async function activate({
   myStatusBarItem.color = "red";
   myStatusBarItem.show();
 }
+export function deactivate() {}

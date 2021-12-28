@@ -5,10 +5,9 @@ const qs = require("qs");
 
 export async function axiosGet(
   config: { url: string; param: {} },
-  workspaceState: vscode.Memento
+  token?: string
 ) {
   try {
-    const token = workspaceState.get("token");
     // console.log('reqBody:',{
     //   method: "GET",
     //   headers: {

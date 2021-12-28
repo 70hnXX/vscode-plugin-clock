@@ -4,11 +4,11 @@ exports.getScheduleList = void 0;
 const request_1 = require("./request");
 const config_1 = require("./config");
 /** 获取日程列表 GET /api/schedule' */
-async function getScheduleList(params, workspaceState) {
+async function getScheduleList(params, token) {
     return (0, request_1.axiosGet)({
         url: `${config_1.apiUrl}/api/schedule`,
         param: params,
-    }, workspaceState);
+    }, token);
 }
 exports.getScheduleList = getScheduleList;
 // /** 创建日程 POST /api/schedule */

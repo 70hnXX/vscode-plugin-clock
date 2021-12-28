@@ -47,23 +47,7 @@
 		],
 		"commands": [
 			{
-				"command": "work-clock.helloWorld",
-				"title": "Hello World"
-			},
-			{
-				"command": "work-clock.showSelectionCount",
-				"title": "showSelectionCount"
-			},
-			{
-				"command": "work-clock.refreshEntry",
-				"title": "刷新",
-				"icon": {
-					"dark": "media/light/refresh.svg",
-					"light": "media/dark/refresh.svg"
-				}
-			},
-			{
-				"command": "work-clock.addEntry",
+				"command": "vsClock-schdule.add",
 				"title": "添加",
 				"icon": {
 					"dark": "media/light/add.svg",
@@ -71,96 +55,90 @@
 				}
 			},
 			{
-				"command": "work-clock.deleteFolder",
-				"title": "删除",
-				"icon": {
-					"dark": "media/light/delete.svg",
-					"light": "media/dark/delete.svg"
-				}
-			},
-			{
-				"command": "work-clock.edit",
+				"command": "vsClock-schdule.edit",
 				"title": "编辑",
 				"icon": {
 					"dark": "media/light/edit.svg",
 					"light": "media/dark/edit.svg"
+				}
+			},
+			{
+				"command": "vsClock-schdule.delete",
+				"title": "删除",
+				"icon": {
+					"dark": "media/light/delete.svg",
+					"light": "media/dark/delete.svg"
 				}
 			}
 		],
 		"viewsContainers": {
 			"activitybar": [
 				{
-					"id": "package-explorer",
-					"title": "任务列表",
+					"id": "treeview-explorer",
+					"title": "TreeView Explorer",
 					"icon": "media/clock.svg"
 				}
 			]
 		},
 		"views": {
-			"package-explorer": [
+			"treeview-explorer": [
 				{
-					"id": "package-schedule",
-					"name": "日程",
-					"icon": "media/delete-white.svg"
-				},
-				{
-					"id": "package-goal",
-					"name": "目标"
+					"id": "treeview",
+					"name": "TreeView Explorer",
+					"icon": "assets/output.svg",
+					"contextualTitle": "TreeView Explorer"
 				}
 			]
 		},
 		"menus": {
 			"view/title": [
 				{
-					"id": "package-refreash",
-					"title": "refreshEntry",
-					"command": "work-clock.refreshEntry",
-					"group": "navigation"
-				},
-				{
-					"id": "package-add",
-					"title": "addEntry",
-					"command": "work-clock.addEntry",
-					"group": "navigation"
+					"command": "vsClock-schdule.add",
+					"group": "navigation",
+					"when": "view == treeview"
 				}
 			],
 			"view/item/context": [
 				{
-					"command": "work-clock.edit",
-					"group": "inline",
-					"when": "viewItem == folder"
+					"command": "vsClock-schdule.edit",
+					"when": "view == treeview && viewItem == treeviewitem",
+					"group": "inline"
 				},
 				{
-					"command": "work-clock.deleteFolder",
-					"group": "inline",
-					"when": "viewItem == folder"
+					"command": "vsClock-schdule.delete",
+					"when": "view == treeview && viewItem == treeviewitem",
+					"group": "inline"
+				},
+				{
+					"command": "vsClock-schdule.delete",
+					"when": "view == treeview && viewItem == treeviewitem"
 				}
 			]
+		},
+		"scripts": {
+			"vscode:prepublish": "yarn run compile",
+			"compile": "tsc -p ./",
+			"watch": "tsc -watch -p ./",
+			"pretest": "yarn run compile && yarn run lint",
+			"lint": "eslint src --ext ts",
+			"test": "node ./out/test/runTest.js"
+		},
+		"devDependencies": {
+			"@types/glob": "^7.1.4",
+			"@types/mocha": "^9.0.0",
+			"@types/node": "14.x",
+			"@types/vscode": "^1.63.0",
+			"@typescript-eslint/eslint-plugin": "^5.1.0",
+			"@typescript-eslint/parser": "^5.1.0",
+			"@vscode/test-electron": "^1.6.2",
+			"eslint": "^8.1.0",
+			"glob": "^7.1.7",
+			"mocha": "^9.1.3",
+			"typescript": "^4.4.4"
+		},
+		"dependencies": {
+			"axios": "^0.24.0",
+			"qs": "^6.10.2"
 		}
-	},
-	"scripts": {
-		"vscode:prepublish": "yarn run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"pretest": "yarn run compile && yarn run lint",
-		"lint": "eslint src --ext ts",
-		"test": "node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/glob": "^7.1.4",
-		"@types/mocha": "^9.0.0",
-		"@types/node": "14.x",
-		"@types/vscode": "^1.63.0",
-		"@typescript-eslint/eslint-plugin": "^5.1.0",
-		"@typescript-eslint/parser": "^5.1.0",
-		"@vscode/test-electron": "^1.6.2",
-		"eslint": "^8.1.0",
-		"glob": "^7.1.7",
-		"mocha": "^9.1.3",
-		"typescript": "^4.4.4"
-	},
-	"dependencies": {
-		"axios": "^0.24.0",
-		"qs": "^6.10.2"
 	}
 }

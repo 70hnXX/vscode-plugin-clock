@@ -5,9 +5,8 @@ exports.axiosPost = exports.axiosGet = void 0;
 const vscode = require("vscode");
 const axios = require("axios");
 const qs = require("qs");
-async function axiosGet(config, workspaceState) {
+async function axiosGet(config, token) {
     try {
-        const token = workspaceState.get("token");
         // console.log('reqBody:',{
         //   method: "GET",
         //   headers: {
